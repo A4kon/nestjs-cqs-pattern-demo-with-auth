@@ -2,6 +2,7 @@ import { Injectable } from '@nestjs/common';
 import { PrismaService } from 'src/prisma.service';
 import { CreateCustomerDto } from './create-customer.dto';
 import * as bcrypt from 'bcrypt';
+import { RolesEnum } from 'src/lib/helpers/enums/roles.enum';
 
 @Injectable()
 export class CreateCustomerUsecase {
@@ -15,6 +16,7 @@ export class CreateCustomerUsecase {
       data: {
         email,
         password: hash,
+        role: RolesEnum.CUSTOMER,
       },
     });
   }
