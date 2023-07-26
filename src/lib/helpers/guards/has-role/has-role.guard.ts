@@ -1,10 +1,19 @@
-import { Injectable, CanActivate, ExecutionContext } from '@nestjs/common';
+import {
+  Injectable,
+  CanActivate,
+  ExecutionContext,
+  UnauthorizedException,
+} from '@nestjs/common';
 import { Reflector } from '@nestjs/core';
 import { RolesEnum } from '../../enums/roles.enum';
+import { UnauthorizedCommandEvent } from 'src/auth/cqs/events/unauthorized-command/unauthorized-command.event';
+import { EventBus } from '@nestjs/cqrs';
+import { randomUUID } from 'crypto';
+import { GqlExecutionContext } from '@nestjs/graphql';
 
 @Injectable()
 export class HasRoleGuard implements CanActivate {
-  constructor(private reflector: Reflector) {}
+  constructor(private reflector: Reflector, private eventBus: EventBus) {}
 
   canActivate(context: ExecutionContext): boolean {
     const requiredRoles = this.reflector.getAllAndOverride<RolesEnum[]>(
@@ -14,8 +23,8 @@ export class HasRoleGuard implements CanActivate {
     if (!requiredRoles) {
       return true;
     }
-
-    const request = context.switchToHttp().getRequest();
+    const gqlContext = GqlExecutionContext.create(context);
+    const request = gqlContext.getContext().req;
     try {
       const token = JSON.parse(
         Buffer.from(
@@ -23,8 +32,16 @@ export class HasRoleGuard implements CanActivate {
           'base64',
         ).toString(),
       );
-      return requiredRoles.some((role) => token.user.role?.includes(role));
+      const exists = requiredRoles.some((role) =>
+        token.user.role?.includes(role),
+      );
+      if (!exists) {
+        throw new UnauthorizedException();
+      }
+      return;
     } catch (e) {
+      const event = new UnauthorizedCommandEvent(randomUUID());
+      this.eventBus.publish(event);
       return false;
     }
   }

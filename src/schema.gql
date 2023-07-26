@@ -26,6 +26,26 @@ enum RolesEnum {
   ADMIN
 }
 
+"""customer model"""
+type AuthModel {
+  token: String
+}
+
 type Query {
   getCustomerById(id: String!): CustomerModel!
+}
+
+type Mutation {
+  signIn(data: SignInInput!): AuthModel!
+  createCustomer(data: CreateCustomerInput!): Boolean!
+}
+
+input SignInInput {
+  email: String!
+  password: String!
+}
+
+input CreateCustomerInput {
+  email: String!
+  password: String!
 }

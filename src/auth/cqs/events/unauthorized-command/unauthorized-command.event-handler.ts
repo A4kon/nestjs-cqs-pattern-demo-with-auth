@@ -9,6 +9,6 @@ export class UnauthorizedCommandEventHandler
   private readonly logger = new Logger(UnauthorizedCommandEventHandler.name);
 
   handle(event: UnauthorizedCommandEvent) {
-    this.logger.log(event);
+    this.logger.log(event.id);
   }
 }
