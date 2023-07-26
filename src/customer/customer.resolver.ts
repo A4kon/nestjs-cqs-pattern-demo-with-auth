@@ -1,14 +1,20 @@
-import { Args, Query, Resolver } from '@nestjs/graphql';
+import { CommandBus } from '@nestjs/cqrs';
+import { Mutation, Query, Resolver } from '@nestjs/graphql';
 import { Customer } from 'lib/entities/customer.entity';
-import { CustomerService } from './customer.service';
-import { GetCustomerInput } from './dto/customer.input';
 
 @Resolver(() => Customer)
 export class CustomerResolver {
-  constructor(private readonly customerService: CustomerService) {}
+  constructor(private commandBus: CommandBus) {}
+
+  @Mutation(() => Boolean)
+  async updateCustomer() {}
+
+  @Mutation(() => Boolean)
+  async deleteCustomer() {}
+
+  @Query(() => Customer)
+  async getCustomerById() {}
 
   @Query(() => [Customer])
-  async customers(@Args('data') { skip, take, where }: GetCustomerInput) {
-    return this.customerService.findAll({ skip, take, where });
-  }
+  async listCustomers() {}
 }

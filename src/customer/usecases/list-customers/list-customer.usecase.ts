@@ -1,11 +1,11 @@
 import { Injectable } from '@nestjs/common';
 import { PrismaService } from 'src/prisma.service';
-import { GetCustomerInput } from './dto/customer.input';
+import { ListCustomersDto } from './list-customers.dto';
 
 @Injectable()
-export class CustomerService {
+export class ListCustomersUsecase {
   constructor(private prisma: PrismaService) {}
-  async findAll(params: GetCustomerInput) {
+  async search(params: ListCustomersDto) {
     const { skip, take, cursor, where } = params;
 
     return this.prisma.customer.findMany({

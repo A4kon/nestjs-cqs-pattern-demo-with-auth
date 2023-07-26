@@ -1,11 +1,22 @@
 import { Module } from '@nestjs/common';
-import { CustomerService } from './customer.service';
+import { CqrsModule } from '@nestjs/cqrs';
 import { PrismaService } from 'src/prisma.service';
-import { CustomerResolver } from './customer.resolver';
+import { usecases } from './usecases';
+import { eventHandlers, events } from './cqs/events';
+import { commandHandlers, commands } from './cqs/commands';
+import { queries, queryHandlers } from './cqs/queries';
 
 @Module({
-  imports: [],
-  controllers: [],
-  providers: [CustomerService, PrismaService, CustomerResolver],
+  imports: [CqrsModule],
+  providers: [
+    PrismaService,
+    ...usecases,
+    ...eventHandlers,
+    ...events,
+    ...commands,
+    ...commandHandlers,
+    ...queries,
+    ...queryHandlers,
+  ],
 })
 export class CustomerModule {}
