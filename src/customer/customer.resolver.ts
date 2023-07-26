@@ -1,20 +1,27 @@
-import { CommandBus } from '@nestjs/cqrs';
-import { Mutation, Query, Resolver } from '@nestjs/graphql';
-import { Customer } from 'lib/entities/customer.entity';
+import { CommandBus, QueryBus } from '@nestjs/cqrs';
+import { Args, Query, Resolver } from '@nestjs/graphql';
+import { GetCustomerByIdQuery } from './cqs/queries/get-customer-by-id/get-customer-by-id.query';
+import { CustomerModel } from './models/customer.model';
+import { GetCustomerByIdArguments } from './models/arguments/get-customer-by-id.arguments';
 
-@Resolver(() => Customer)
+@Resolver()
 export class CustomerResolver {
-  constructor(private commandBus: CommandBus) {}
+  constructor(private commandBus: CommandBus, private queryBus: QueryBus) {}
 
-  @Mutation(() => Boolean)
-  async updateCustomer() {}
+  // @Mutation(() => Boolean)
+  // async updateCustomer() {}
 
-  @Mutation(() => Boolean)
-  async deleteCustomer() {}
+  // @Mutation(() => Boolean)
+  // async deleteCustomer() {}
 
-  @Query(() => Customer)
-  async getCustomerById() {}
+  @Query(() => CustomerModel)
+  async getCustomerById(@Args() data: GetCustomerByIdArguments) {
+    const query = new GetCustomerByIdQuery(data.id);
+    return this.queryBus.execute(query);
+  }
 
-  @Query(() => [Customer])
-  async listCustomers() {}
+  // @Query(() => [Customer])
+  // async listCustomers() {
+  // return await this.queryBus.publish()
+  // }
 }

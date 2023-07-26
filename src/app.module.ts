@@ -9,6 +9,7 @@ import { ConfigurationModule } from './lib/config/config.module';
 @Module({
   imports: [
     ConfigurationModule,
+    CustomerModule,
     GraphQLModule.forRoot<ApolloDriverConfig>({
       driver: ApolloDriver,
       autoSchemaFile: join(process.cwd(), 'src/schema.gql'),
@@ -19,7 +20,6 @@ import { ConfigurationModule } from './lib/config/config.module';
       playground: true,
       introspection: true,
     }),
-    CustomerModule,
   ],
   controllers: [],
   providers: [PrismaService],

@@ -2,7 +2,8 @@
 # THIS FILE WAS AUTOMATICALLY GENERATED (DO NOT MODIFY)
 # ------------------------------------------------------
 
-type Customer {
+"""customer model"""
+type CustomerModel {
   id: ID!
 
   """Date and time when object was created."""
@@ -10,7 +11,9 @@ type Customer {
 
   """Date and time when the object was updated last time."""
   updatedAt: Timestamp!
-  email: String!
+  email: String
+  status: Boolean
+  role: RolesEnum!
 }
 
 """
@@ -18,20 +21,11 @@ type Customer {
 """
 scalar Timestamp
 
+enum RolesEnum {
+  CUSTOMER
+  ADMIN
+}
+
 type Query {
-  customers(data: GetCustomerInput!): [Customer!]!
-}
-
-input GetCustomerInput {
-  cursor: String
-  skip: Int
-  take: Int
-  where: WhereCustomerInput
-}
-
-input WhereCustomerInput {
-  id: String
-  email: String
-  createdAt: Timestamp
-  updatedAt: Timestamp
+  getCustomerById(id: String!): CustomerModel!
 }

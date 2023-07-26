@@ -5,11 +5,13 @@ import { usecases } from './usecases';
 import { eventHandlers, events } from './cqs/events';
 import { commandHandlers, commands } from './cqs/commands';
 import { queries, queryHandlers } from './cqs/queries';
+import { CustomerResolver } from './customer.resolver';
 
 @Module({
   imports: [CqrsModule],
   providers: [
     PrismaService,
+    CustomerResolver,
     ...usecases,
     ...eventHandlers,
     ...events,
