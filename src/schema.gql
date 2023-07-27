@@ -33,11 +33,25 @@ type AuthModel {
 
 type Query {
   getCustomerById(id: String!): CustomerModel!
+  listCustomers(data: ListCustomersArguments!): [CustomerModel!]!
+}
+
+input ListCustomersArguments {
+  cursor: String
+  where: ListCustomersFieldsArguments
+}
+
+input ListCustomersFieldsArguments {
+  id: String
+  email: String
 }
 
 type Mutation {
   signIn(data: SignInInput!): AuthModel!
   createCustomer(data: CreateCustomerInput!): Boolean!
+  validateUserCode(data: ValidateUserCodeInput!): Boolean!
+  updateCustomer(data: UpdateCustomerInput!): Boolean!
+  deleteCustomer(data: DeleteCustomerInput!): Boolean!
 }
 
 input SignInInput {
@@ -48,4 +62,18 @@ input SignInInput {
 input CreateCustomerInput {
   email: String!
   password: String!
+}
+
+input ValidateUserCodeInput {
+  email: String!
+  code: Float!
+}
+
+input UpdateCustomerInput {
+  id: String!
+  email: String!
+}
+
+input DeleteCustomerInput {
+  id: String!
 }

@@ -38,7 +38,7 @@ export class HasRoleGuard implements CanActivate {
       if (!exists) {
         throw new UnauthorizedException();
       }
-      return;
+      return true;
     } catch (e) {
       const event = new UnauthorizedCommandEvent(randomUUID());
       this.eventBus.publish(event);

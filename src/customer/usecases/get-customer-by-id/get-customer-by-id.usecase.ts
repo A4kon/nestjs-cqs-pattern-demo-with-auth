@@ -7,7 +7,7 @@ export class GetCustomerByIdUsecase {
   constructor(private prisma: PrismaService) {}
   async search(params: GetCustomerByIdDto) {
     const { id } = params;
-    return this.prisma.customer.findUnique({
+    return await this.prisma.customer.findUnique({
       where: {
         id,
       },

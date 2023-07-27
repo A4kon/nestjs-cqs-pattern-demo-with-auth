@@ -7,7 +7,7 @@ export class UpdateCustomerUsecase {
   constructor(private prisma: PrismaService) {}
   async execute(params: UpdateCustomerDto) {
     const { id, email } = params;
-    return this.prisma.customer.update({
+    return await this.prisma.customer.update({
       where: {
         id,
       },

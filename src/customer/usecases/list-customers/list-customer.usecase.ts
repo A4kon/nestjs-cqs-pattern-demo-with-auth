@@ -8,7 +8,7 @@ export class ListCustomersUsecase {
   async search(params: ListCustomersDto) {
     const { skip, take, cursor, where } = params;
 
-    return this.prisma.customer.findMany({
+    return await this.prisma.customer.findMany({
       skip,
       take,
       cursor,

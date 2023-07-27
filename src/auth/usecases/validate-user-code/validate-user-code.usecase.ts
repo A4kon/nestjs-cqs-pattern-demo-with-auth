@@ -1,4 +1,8 @@
-import { Injectable, NotFoundException } from '@nestjs/common';
+import {
+  BadRequestException,
+  Injectable,
+  NotFoundException,
+} from '@nestjs/common';
 import { PrismaService } from 'src/prisma.service';
 import { ValidateUserCodeDto } from './validate-user-code.dto';
 
@@ -15,12 +19,14 @@ export class ValidateUserCodeUsecase {
     if (!exists) {
       throw new NotFoundException('User for that action does not exists');
     }
+    if (exists.isVerified) {
+      throw new BadRequestException('User already verified');
+    }
     if (exists.tmpOtp === code) {
-      this.prisma.customer.update({
+      await this.prisma.customer.update({
         where: { id: exists.id },
         data: {
           isVerified: true,
-          tmpOtp: null,
         },
       });
     }

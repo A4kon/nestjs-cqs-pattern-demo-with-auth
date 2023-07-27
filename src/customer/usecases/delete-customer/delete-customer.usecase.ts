@@ -7,7 +7,7 @@ export class DeleteCustomerUsecase {
   constructor(private prisma: PrismaService) {}
   async execute(params: DeleteCustomerDto) {
     const { id } = params;
-    return this.prisma.customer.update({
+    return await this.prisma.customer.update({
       where: {
         id,
       },

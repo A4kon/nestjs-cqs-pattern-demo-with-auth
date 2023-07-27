@@ -1,9 +1,9 @@
-import { ArgsType, Field } from '@nestjs/graphql';
+import { Field, InputType } from '@nestjs/graphql';
 import { Prisma } from '@prisma/client';
 import { IsEmail, IsOptional, IsUUID } from 'class-validator';
 import { PaginationInput } from 'src/lib/helpers/models/input/pagination.input';
 
-@ArgsType()
+@InputType()
 export class ListCustomersFieldsArguments {
   @IsOptional()
   @IsUUID('4')
@@ -16,7 +16,7 @@ export class ListCustomersFieldsArguments {
   email?: string;
 }
 
-@ArgsType()
+@InputType()
 export class ListCustomersArguments extends PaginationInput {
   @Field(() => String, { nullable: true })
   cursor?: Prisma.CustomerWhereUniqueInput;

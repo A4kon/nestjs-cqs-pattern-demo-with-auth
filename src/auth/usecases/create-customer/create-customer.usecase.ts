@@ -13,11 +13,12 @@ export class CreateCustomerUsecase {
   constructor(private prisma: PrismaService, private eventBus: EventBus) {}
   async execute(params: CreateCustomerDto) {
     const { email, password } = params;
-    const exists = this.prisma.customer.findUnique({
+    const exists = await this.prisma.customer.findUnique({
       where: {
         email,
       },
     });
+    console.log(exists);
     if (exists) {
       const event = new CustomerCreationFailedEvent(randomUUID());
       await this.eventBus.publish(event);
@@ -25,7 +26,7 @@ export class CreateCustomerUsecase {
     }
     const hash = await bcrypt.hash(password, 10);
     // TODO: generating and sending otp
-    this.prisma.customer.create({
+    await this.prisma.customer.create({
       data: {
         email,
         password: hash,

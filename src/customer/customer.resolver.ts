@@ -12,6 +12,7 @@ import { ListCustomersQuery } from './cqs/queries/list-customers/list-customers.
 import { ListCustomersArguments } from './models/arguments/list-customers.arguments';
 import { UpdateCustomerInput } from './models/input/update-customer.input';
 import { DeleteCustomerInput } from './models/input/delete-customer.input';
+import { UpdateCustomerCommand } from './cqs/commands/update-customer/update-customer.command';
 
 @Resolver()
 export class CustomerResolver {
@@ -20,29 +21,33 @@ export class CustomerResolver {
   @UseGuards(HasRoleGuard)
   @HasRole(RolesEnum.ADMIN)
   @Mutation(() => Boolean)
-  async updateCustomer(@Args() data: UpdateCustomerInput) {
-    const command = new DeleteCustomerCommand(data.id);
-    return this.commandBus.execute(command);
+  async updateCustomer(@Args('data') data: UpdateCustomerInput) {
+    const command = new UpdateCustomerCommand(data.id, data.email);
+    await this.commandBus.execute(command);
+    return true;
   }
 
   @UseGuards(HasRoleGuard)
   @HasRole(RolesEnum.ADMIN)
   @Mutation(() => Boolean)
-  async deleteCustomer(@Args() data: DeleteCustomerInput) {
+  async deleteCustomer(@Args('data') data: DeleteCustomerInput) {
     const command = new DeleteCustomerCommand(data.id);
-    return this.commandBus.execute(command);
+    await this.commandBus.execute(command);
+    return true;
   }
 
+  @HasRole(RolesEnum.ADMIN, RolesEnum.CUSTOMER)
+  @UseGuards(HasRoleGuard)
   @Query(() => CustomerModel)
   async getCustomerById(@Args() data: GetCustomerByIdArguments) {
     const query = new GetCustomerByIdQuery(data.id);
     return this.queryBus.execute(query);
   }
 
-  @UseGuards(HasRoleGuard)
   @HasRole(RolesEnum.ADMIN, RolesEnum.CUSTOMER)
+  @UseGuards(HasRoleGuard)
   @Query(() => [CustomerModel])
-  async listCustomers(@Args() data: ListCustomersArguments) {
+  async listCustomers(@Args('data') data: ListCustomersArguments) {
     const query = new ListCustomersQuery(
       data.skip,
       data.take,

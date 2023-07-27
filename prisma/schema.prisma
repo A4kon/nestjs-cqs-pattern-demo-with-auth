@@ -19,7 +19,7 @@ model Customer {
   updatedAt DateTime @updatedAt
   status Boolean @default(true)
   isVerified Boolean @default(false)
-  tmpOtp    Int @default(0000)
+  tmpOtp    Int @default(1324)
   role      Role @default(CUSTOMER)
 }
 
