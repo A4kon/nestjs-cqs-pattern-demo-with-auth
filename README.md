@@ -16,6 +16,7 @@ TODO (what can and will be improved one day :D):
 - add pagination response when listing users (next page etc.)
 - implement brute force protection for logging
 - implement ip logs for user
+- implement DDD
 
 ## Installation
 
