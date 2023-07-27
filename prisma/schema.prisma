@@ -18,6 +18,8 @@ model Customer {
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
   status Boolean @default(true)
+  isVerified Boolean @default(false)
+  tmpOtp    Int @default(0000)
   role      Role @default(CUSTOMER)
 }
 

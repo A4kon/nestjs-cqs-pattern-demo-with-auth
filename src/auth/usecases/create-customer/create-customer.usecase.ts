@@ -24,7 +24,7 @@ export class CreateCustomerUsecase {
       throw new BadRequestException('User already exists');
     }
     const hash = await bcrypt.hash(password, 10);
-
+    // TODO: generating and sending otp
     this.prisma.customer.create({
       data: {
         email,

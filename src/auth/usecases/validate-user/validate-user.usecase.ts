@@ -32,7 +32,12 @@ export class ValidateUserUsecase {
       this.eventBus.publish(event);
       throw new UnauthorizedException();
     }
-
+    if (!user.isVerified) {
+      // TODO: optional event for just not verified users usecase
+      const event = new LoginFailedEvent(randomUUID());
+      this.eventBus.publish(event);
+      throw new UnauthorizedException();
+    }
     return {
       id: user.id,
       email: user.email,

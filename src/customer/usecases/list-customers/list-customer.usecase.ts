@@ -12,7 +12,10 @@ export class ListCustomersUsecase {
       skip,
       take,
       cursor,
-      where,
+      where: {
+        ...where,
+        status: true,
+      },
     });
   }
 }

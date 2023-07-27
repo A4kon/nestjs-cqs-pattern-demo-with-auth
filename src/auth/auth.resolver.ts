@@ -1,17 +1,15 @@
-import { UseGuards } from '@nestjs/common';
 import { SignIncase } from './usecases/sign-in/sign-in.usecase';
 import { Resolver, Mutation, Args } from '@nestjs/graphql';
 import { AuthModel } from './models/auth.model';
-import { HasRole } from 'src/lib/helpers/guards/has-role/has-role.decorator';
-import { RolesEnum } from 'src/lib/helpers/enums/roles.enum';
 import { CommandBus, EventBus } from '@nestjs/cqrs';
 import { CreateCustomerCommand } from './cqs/commands/create-customer/create-customer.command';
 import { CreateCustomerInput } from './models/input/create-customer.input';
 import { SignInInput } from './models/input/sign-in.input';
 import { ValidateUserUsecase } from './usecases/validate-user/validate-user.usecase';
-import { HasRoleGuard } from 'src/lib/helpers/guards/has-role/has-role.guard';
 import { randomUUID } from 'crypto';
 import { LoginSuccededEvent } from './cqs/events/login-succeded/login-succeded.event';
+import { ValidateUserCodeInput } from './models/input/validate-user-code.input';
+import { ValidateUserCodeCommand } from './cqs/commands/validate-user/validate-user-code.command';
 
 @Resolver()
 export class AuthResolver {
@@ -37,11 +35,17 @@ export class AuthResolver {
       ).access_token,
     };
   }
-  @UseGuards(HasRoleGuard)
-  @HasRole(RolesEnum.ADMIN)
+
   @Mutation(() => Boolean)
   async createCustomer(@Args('data') data: CreateCustomerInput) {
     const command = new CreateCustomerCommand(data.email, data.password);
+    await this.commandBus.execute(command);
+    return true;
+  }
+
+  @Mutation(() => Boolean)
+  async validateUserCode(@Args('data') data: ValidateUserCodeInput) {
+    const command = new ValidateUserCodeCommand(data.email, data.code);
     await this.commandBus.execute(command);
     return true;
   }
