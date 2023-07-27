@@ -10,6 +10,7 @@ TODO (what can and will be improved one day :D):
 - implement better logger
 - check business logic for deleting users (make them anonymous after delete  -> GDPR)
 - get rid off any type in some places in code
+- remove unused packages from package.json and lock version
 - write docs for functions
 - write description for queries/mutations
 - add pagination response when listing users (next page etc.)
