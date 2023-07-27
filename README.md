@@ -1,8 +1,20 @@
-# Node.js recruitment task - senior
+# Nest.js CQS Pattern Crud demo with role based auth
 
-TODO: 
-- add types for function returns
+TODO (what can and will be improved one day :D): 
+- add types for function returns ie. Promise<T>
 - add refresh token
+- implement otp code sending vie sns/twilio
+- implement sentry for error logs
+- implement ci/cd for deploy
+- write e2e tests
+- implement better logger
+- check business logic for deleting users (make them anonymous after delete  -> GDPR)
+- get rid off any type in some places in code
+- write docs for functions
+- write description for queries/mutations
+- add pagination response when listing users (next page etc.)
+- implement brute force protection for logging
+- implement ip logs for user
 
 ## Installation
 
